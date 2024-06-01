@@ -4,6 +4,8 @@ RUN apk --update add gcc build-base freetype-dev libpng-dev openblas-dev postgre
 
 WORKDIR /app/
 
+ENV PYTHONPATH=/app/
+
 COPY ./req.txt /app/
 
 RUN pip install -r req.txt

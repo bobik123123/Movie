@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-
+nb = {'null': True, 'blank': True}
 
 class Janr(models.Model):
     name = models.CharField()
@@ -35,10 +36,38 @@ class Movie(models.Model):
     def __str__(self):
         return self.name
 
-class Reviews(models.Model):
-    review = models.TextField()
-    movie = models.ForeignKey(Movie, models.SET_NULL, related_name="reviews", null=True)
-    rating = models.PositiveIntegerField()
 
-    def __str__(self):
-        return self.review
+class Reviews(models.Model):
+    STARS = [
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    ]
+    user = models.ForeignKey(User, models.SET_NULL, **nb, verbose_name="Owner")
+    movie = models.ForeignKey(Movie, models.SET_NULL, **nb, verbose_name="Movie", related_name="reviews")
+    stars = models.PositiveSmallIntegerField("Stars", choices=STARS, **nb)
+    text = models.TextField("Text", **nb)
+    created = models.DateField("Created at", auto_now_add=True)
+    updated_date = models.DateField("Updated date", auto_now=True)
+
+    class Meta:
+        verbose_name = "Review"
+        verbose_name_plural = "Reviews"
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, models.SET_NULL, **nb, verbose_name="Comment")
+    text = models.TextField("Text", **nb)
+    movie = models.ForeignKey(Movie, models.SET_NULL, **nb, verbose_name="Movie", related_name="comments")
+
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+
+
+# class View(models.Model, ABSModel):
+#     user = models.ForeignKey(User, models.SET_NULL, related_name='views', **nb)
+#     movie = models.ForeignKey(Movie, models.CASCADE, related_name='views')
+#     total_view_time = models.PositiveIntegerField(**nb)

@@ -14,8 +14,6 @@ from pathlib import Path
 import environ
 
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -28,8 +26,9 @@ SECRET_KEY = 'django-insecure-@=n$mn+w&*1=53klbnp5d@99o_((r4c-gokc^zr3mj21mo!z^w
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -42,9 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #apps
+    # apps
     'account',
     'cinematica',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
